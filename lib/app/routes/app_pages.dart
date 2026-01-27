@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:gym_trainer/app/modules/home/views/home_view.dart';
 import 'package:gym_trainer/app/modules/home/bindings/home_binding.dart';
-import 'package:gym_trainer/presentation/statistic/statistic.screen.dart';
+import 'package:gym_trainer/presentation/favorite/favorite_screen.dart';
 import 'package:gym_trainer/presentation/wallet/wallet.screen.dart';
 import 'package:gym_trainer/presentation/profile/profile.screen.dart';
 
@@ -17,8 +17,8 @@ class AppPages {
       binding: HomeBinding(),
     ),
     GetPage(
-      name: Routes.STATISTIC,
-      page: () => StatisticScreen(),
+      name: Routes.FAVORITE,
+      page: () => const FavoriteScreen(),
     ),
     GetPage(
       name: Routes.WALLET,

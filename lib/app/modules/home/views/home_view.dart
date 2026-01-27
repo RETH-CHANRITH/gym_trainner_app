@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:gym_trainer/presentation/home/home.screen.dart';
 import 'package:gym_trainer/presentation/profile/profile.screen.dart';
-import 'package:gym_trainer/presentation/statistic/statistic.screen.dart';
+import 'package:gym_trainer/presentation/favorite/favorite_screen.dart';
 import 'package:gym_trainer/presentation/wallet/wallet.screen.dart';
 import '../controllers/home_controller.dart';
 
@@ -27,7 +27,7 @@ class HomeView extends GetView<HomeController> {
 
     final pages = [
       const HomeScreen(),
-      const StatisticScreen(),
+      const FavoriteScreen(),
       const WalletScreen(),
       const ProfileScreen(),
     ];
