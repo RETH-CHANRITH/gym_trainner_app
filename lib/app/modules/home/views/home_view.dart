@@ -12,11 +12,12 @@ class HomeView extends GetView<HomeController> {
 
 	// App Colors
 	static const Color primaryPurple = Color(0xFF896CFE);
-	static const Color darkBg = Color(0xFF121217);
-	static const Color cardBg = Color(0xFF1E1C26);
+	static const Color darkBg = Color(0xFF101014);
+	static const Color cardBg = Color(0xFF181824);
 	static const Color borderColor = Color(0xFF2D2838);
 	static const Color accentYellow = Color(0xFFE2F163);
 	static const Color lightPurple = Color(0xFFB3A0FF);
+	static const Color glassBg = Color(0x33FFFFFF);
 
 	@override
 	Widget build(BuildContext context) {
@@ -37,10 +38,19 @@ class HomeView extends GetView<HomeController> {
 		return Obx(
 			() => Scaffold(
 				backgroundColor: darkBg,
-				body: SafeArea(child: pages[controller.currentIndex.value]),
-				   // Floating action button removed
+				extendBody: true,
+				body: Container(
+					decoration: const BoxDecoration(
+						gradient: LinearGradient(
+							begin: Alignment.topLeft,
+							end: Alignment.bottomRight,
+							colors: [Color(0xFF181824), Color(0xFF23233A), Color(0xFF101014)],
+						),
+					),
+					child: SafeArea(child: pages[controller.currentIndex.value]),
+				),
 				bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-					backgroundColor: cardBg,
+					backgroundColor: cardBg.withOpacity(0.95),
 					itemCount: iconList.length,
 					tabBuilder: (int index, bool isActive) {
 						return Column(
@@ -48,30 +58,32 @@ class HomeView extends GetView<HomeController> {
 							children: [
 								Icon(
 									iconList[index],
-									size: 24,
-									color:
-											isActive ? accentYellow : Colors.white.withOpacity(0.4),
+									size: 28,
+									color: isActive ? accentYellow : Colors.white.withOpacity(0.4),
 								),
 								const SizedBox(height: 4),
 								AnimatedContainer(
 									duration: const Duration(milliseconds: 200),
-									width: isActive ? 6 : 0,
-									height: isActive ? 6 : 0,
-									decoration: const BoxDecoration(
+									width: isActive ? 8 : 0,
+									height: isActive ? 8 : 0,
+									decoration: BoxDecoration(
 										color: accentYellow,
 										shape: BoxShape.circle,
+										boxShadow: isActive
+												? [BoxShadow(color: accentYellow.withOpacity(0.5), blurRadius: 8)]
+												: [],
 									),
 								),
 							],
 						);
 					},
 					activeIndex: controller.currentIndex.value,
-					   gapLocation: GapLocation.none,
-					   notchSmoothness: NotchSmoothness.defaultEdge,
+					gapLocation: GapLocation.center,
+					notchSmoothness: NotchSmoothness.softEdge,
 					leftCornerRadius: 24,
 					rightCornerRadius: 24,
-					height: 70,
-					splashColor: primaryPurple.withOpacity(0.1),
+					height: 74,
+					splashColor: primaryPurple.withOpacity(0.13),
 					splashSpeedInMilliseconds: 300,
 					onTap: controller.changeTab,
 				),
@@ -117,23 +129,39 @@ class HomeView extends GetView<HomeController> {
 		return Row(
 			mainAxisAlignment: MainAxisAlignment.spaceBetween,
 			children: [
-				// Profile avatar
+				// Profile avatar (modernized)
 				Container(
-					width: 46,
-					height: 46,
+					width: 54,
+					height: 54,
 					decoration: BoxDecoration(
+						borderRadius: BorderRadius.circular(18),
+						boxShadow: [
+							BoxShadow(
+								color: primaryPurple.withOpacity(0.18),
+								blurRadius: 12,
+								offset: const Offset(0, 4),
+							),
+						],
 						gradient: const LinearGradient(
-							colors: [primaryPurple, lightPurple],
+							colors: [Color(0xFFB3A0FF), Color(0xFF896CFE)],
+							begin: Alignment.topLeft,
+							end: Alignment.bottomRight,
 						),
-						borderRadius: BorderRadius.circular(14),
 					),
-					child: const Center(
-						child: Text(
-							'M',
-							style: TextStyle(
-								color: Colors.white,
-								fontSize: 18,
-								fontWeight: FontWeight.w600,
+					child: ClipRRect(
+						borderRadius: BorderRadius.circular(18),
+						child: Image.asset(
+							'assets/images/user_avatar.png',
+							fit: BoxFit.cover,
+							errorBuilder: (context, error, stackTrace) => const Center(
+								child: Text(
+									'M',
+									style: TextStyle(
+										color: Colors.white,
+										fontSize: 22,
+										fontWeight: FontWeight.w700,
+									),
+								),
 							),
 						),
 					),
