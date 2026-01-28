@@ -9,6 +9,8 @@ abstract class Routes {
   static const FAVOURITE = _Paths.FAVOURITE;
   static const TRAINER_DETAILS = _Paths.TRAINER_DETAILS;
   static const MESSAGE_SCREEN = _Paths.MESSAGE_SCREEN;
+  static const LOGIN = _Paths.LOGIN;
+  static const SIGN_UP = _Paths.SIGN_UP;
 }
 
 abstract class _Paths {
@@ -20,4 +22,6 @@ abstract class _Paths {
   static const FAVOURITE = '/favourite';
   static const TRAINER_DETAILS = '/trainer-details';
   static const MESSAGE_SCREEN = '/message-screen';
+  static const LOGIN = '/login';
+  static const SIGN_UP = '/sign-up';
 }
