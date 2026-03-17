@@ -1,12 +1,10 @@
 import 'package:get/get.dart';
 
-import '../../../../presentation/wallet/controllers/wallet.controller.dart';
+import 'package:gym_trainer/app/modules/wallet/controllers/wallet_controller.dart';
 
 class WalletControllerBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<WalletController>(
-      () => WalletController(),
-    );
+    Get.lazyPut<WalletController>(() => WalletController());
   }
 }

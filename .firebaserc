@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "gym-trainer-booking-app",
+    "prod": "gym-trainer-booking-app"
+  }
+}

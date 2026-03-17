@@ -1,5 +1,229 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+import '../../../routes/app_pages.dart';
+import '../../../services/user_role_service.dart';
 
 class LoginController extends GetxController {
-  // Placeholder controller for static login view
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final isLoading = false.obs;
+  final isGoogleLoading = false.obs;
+  int _wrongPasswordCount = 0;
+
+  final _auth = FirebaseAuth.instance;
+  final _googleSignIn = GoogleSignIn();
+  final _roleService = Get.find<UserRoleService>();
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Pre-fill email if passed from sign-up screen
+    final args = Get.arguments;
+    if (args != null && args['email'] != null) {
+      emailController.text = args['email'];
+    }
+  }
+
+  Future<void> signInWithGoogle() async {
+    isGoogleLoading.value = true;
+    try {
+      final googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        Get.snackbar(
+          'Cancelled',
+          'Google sign-in was cancelled.',
+          snackPosition: SnackPosition.TOP,
+        );
+        return;
+      }
+
+      final googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final result = await _auth.signInWithCredential(credential);
+      if (result.user == null) {
+        Get.snackbar(
+          'Sign-in failed',
+          'Google authentication returned no user. Please try again.',
+          backgroundColor: const Color(0xFFFF5C5C),
+          colorText: Colors.white,
+          snackPosition: SnackPosition.TOP,
+        );
+        return;
+      }
+
+      await _redirectByRole(result.user);
+    } on FirebaseAuthException catch (e) {
+      String message = e.message ?? 'Google sign-in failed.';
+      if (e.code == 'network-request-failed') {
+        message =
+            'Network unavailable while contacting Firebase. Check emulator internet and DNS.';
+      } else if (e.code == 'account-exists-with-different-credential') {
+        message =
+            'This email is linked with another sign-in method. Use that method first.';
+      } else if (e.code == 'invalid-credential') {
+        message =
+            'Invalid Google credential. Verify Firebase project config and SHA fingerprints.';
+      }
+      Get.snackbar(
+        'Error',
+        '$message (code: ${e.code})',
+        backgroundColor: const Color(0xFFFF5C5C),
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+      );
+    } on PlatformException catch (e) {
+      final details = '${e.code}${e.message != null ? ': ${e.message}' : ''}';
+      Get.snackbar(
+        'Google Sign-In error',
+        'Platform error: $details',
+        backgroundColor: const Color(0xFFFF5C5C),
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+        duration: const Duration(seconds: 5),
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Google sign-in failed: $e',
+        backgroundColor: const Color(0xFFFF5C5C),
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+        duration: const Duration(seconds: 4),
+      );
+    } finally {
+      isGoogleLoading.value = false;
+    }
+  }
+
+  Future<void> login() async {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      Get.snackbar(
+        'Error',
+        'Please fill in all fields',
+        backgroundColor: const Color(0xFFFF5C5C),
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+      );
+      return;
+    }
+
+    isLoading.value = true;
+    try {
+      final result = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      _wrongPasswordCount = 0;
+      await _redirectByRole(result.user);
+    } on FirebaseAuthException catch (e) {
+      _wrongPasswordCount++;
+
+      if (_wrongPasswordCount >= 3) {
+        _wrongPasswordCount = 0;
+        Get.snackbar(
+          'Too many failed attempts',
+          'Redirecting you to create a new account...',
+          backgroundColor: const Color(0xFFFF5C5C),
+          colorText: Colors.white,
+          snackPosition: SnackPosition.TOP,
+          duration: const Duration(seconds: 2),
+        );
+        await Future.delayed(const Duration(seconds: 2));
+        Get.offAllNamed(Routes.SIGN_UP);
+        return;
+      }
+
+      String message = 'Login failed. Please try again.';
+      if (e.code == 'user-not-found')
+        message = 'No account found with this email.';
+      if (e.code == 'wrong-password' || e.code == 'invalid-credential')
+        message = 'Incorrect password.';
+      if (e.code == 'invalid-email') message = 'Invalid email address.';
+
+      final remaining = 3 - _wrongPasswordCount;
+      Get.snackbar(
+        'Error',
+        '$message $remaining attempt(s) left.',
+        backgroundColor: const Color(0xFFFF5C5C),
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> forgotPassword() async {
+    final email = emailController.text.trim();
+    if (email.isEmpty) {
+      Get.snackbar(
+        'Error',
+        'Enter your email first',
+        backgroundColor: const Color(0xFFFF5C5C),
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+      );
+      return;
+    }
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      Get.snackbar(
+        'Sent',
+        'Password reset email sent',
+        backgroundColor: const Color(0xFFCBFF47),
+        colorText: const Color(0xFF0A0A0F),
+        snackPosition: SnackPosition.TOP,
+      );
+    } on FirebaseAuthException catch (e) {
+      Get.snackbar(
+        'Error',
+        e.message ?? 'Failed to send reset email',
+        backgroundColor: const Color(0xFFFF5C5C),
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+      );
+    }
+  }
+
+  Future<void> _redirectByRole(User? user) async {
+    if (user == null) {
+      Get.offAllNamed(Routes.HOME);
+      return;
+    }
+
+    try {
+      final role = await _roleService.ensureAndGetRole(user);
+      switch (role) {
+        case 'trainer':
+          Get.offAllNamed(Routes.TRAINER_DASHBOARD);
+          break;
+        case 'admin':
+          Get.offAllNamed(Routes.ADMIN_DASHBOARD);
+          break;
+        default:
+          Get.offAllNamed(Routes.HOME);
+      }
+    } catch (_) {
+      Get.offAllNamed(Routes.HOME);
+    }
+  }
+
+  @override
+  void onClose() {
+    // Avoid disposing text controllers here because this page can be replaced
+    // during transition animations, causing TextField to read a disposed
+    // controller for one frame.
+    super.onClose();
+  }
 }

@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "security": {
+    "auth": "JWT session + custom claims",
+    "endpointPermissionCheck": true,
+    "idempotencyKeyRequiredForMutations": true,
+    "rateLimitRequired": true,
+    "auditLogMetadata": [
+      "actor",
+      "action",
+      "target",
+      "before",
+      "after",
+      "requestId",
+      "timestamp"
+    ]
+  },
+  "errorContract": {
+    "shape": {
+      "error": "string",
+      "message": "string",
+      "requestId": "string"
+    },
+    "userSafeMessages": true
+  }
+}

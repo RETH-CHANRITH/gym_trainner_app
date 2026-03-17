@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
 
+import '../modules/splash/bindings/splash_binding.dart';
+import '../modules/splash/views/splash_view.dart';
+import '../modules/onboarding/bindings/onboarding_binding.dart';
+import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/favorite/bindings/favorite_binding.dart';
 import '../modules/favorite/views/favorite_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -14,6 +18,7 @@ import '../modules/sign_up/bindings/sign_up_binding.dart';
 import '../modules/sign_up/views/sign_up_view.dart';
 import '../modules/trainer/bindings/trainer_details_binding.dart';
 import '../modules/trainer/views/trainer_details_view.dart';
+import '../modules/wallet/bindings/wallet_binding.dart';
 import '../modules/wallet/views/wallet_screen.dart';
 import '../modules/welcome/bindings/welcome_binding.dart';
 import '../modules/welcome/views/welcome_view.dart';
@@ -37,16 +42,39 @@ import '../modules/notification_permission/bindings/notification_permission_bind
 import '../modules/notification_permission/views/notification_permission_view.dart';
 import '../modules/profile_summary/bindings/profile_summary_binding.dart';
 import '../modules/profile_summary/views/profile_summary_view.dart';
-
-// import '../modules/trainer/views/trainer_details_view.dart';
-// TrainerDetails route temporarily removed for error fix
+import '../modules/book_session/bindings/book_session_binding.dart';
+import '../modules/book_session/views/book_session_view.dart';
+import '../modules/my_bookings/bindings/my_bookings_binding.dart';
+import '../modules/my_bookings/views/my_bookings_view.dart';
+import '../modules/home/views/all_sessions_view.dart';
+import '../modules/search/bindings/search_binding.dart';
+import '../modules/search/views/search_view.dart';
+import '../modules/settings/bindings/settings_binding.dart';
+import '../modules/settings/views/settings_view.dart';
+import '../modules/notifications/bindings/notifications_binding.dart';
+import '../modules/notifications/views/notifications_view.dart';
+import '../modules/wallet/views/transaction_history_screen.dart';
+import '../modules/trainer_dashboard/bindings/trainer_dashboard_binding.dart';
+import '../modules/trainer_dashboard/views/trainer_dashboard_view.dart';
+import '../modules/admin_dashboard/bindings/admin_dashboard_binding.dart';
+import '../modules/admin_dashboard/views/admin_dashboard_view.dart';
 
 part 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.LOGIN;
+  static const INITIAL = Routes.SPLASH;
 
   static final routes = [
+    GetPage(
+      name: Routes.SPLASH,
+      page: () => const SplashView(),
+      binding: SplashBinding(),
+    ),
+    GetPage(
+      name: Routes.ONBOARDING,
+      page: () => const OnboardingView(),
+      binding: OnboardingBinding(),
+    ),
     GetPage(
       name: Routes.HOME,
       page: () => const HomeView(),
@@ -60,6 +88,7 @@ class AppPages {
     GetPage(
       name: Routes.WALLET,
       page: () => WalletScreen(),
+      binding: WalletBinding(),
     ),
     GetPage(
       name: Routes.PROFILE,
@@ -146,5 +175,46 @@ class AppPages {
       page: () => const ProfileSummaryView(),
       binding: ProfileSummaryBinding(),
     ),
+    GetPage(
+      name: _Paths.BOOK_SESSION,
+      page: () => const BookSessionView(),
+      binding: BookSessionBinding(),
+    ),
+    GetPage(
+      name: _Paths.MY_BOOKINGS,
+      page: () => const MyBookingsView(),
+      binding: MyBookingsBinding(),
+    ),
+    GetPage(
+      name: _Paths.SEARCH,
+      page: () => const SearchView(),
+      binding: SearchBinding(),
+    ),
+    GetPage(
+      name: _Paths.SETTINGS,
+      page: () => const SettingsView(),
+      binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: _Paths.NOTIFICATIONS,
+      page: () => const NotificationsView(),
+      binding: NotificationsBinding(),
+    ),
+    GetPage(
+      name: _Paths.TRAINER_DASHBOARD,
+      page: () => const TrainerDashboardView(),
+      binding: TrainerDashboardBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADMIN_DASHBOARD,
+      page: () => const AdminDashboardView(),
+      binding: AdminDashboardBinding(),
+    ),
+    GetPage(
+      name: _Paths.TX_HISTORY,
+      page: () => const TransactionHistoryScreen(),
+      binding: WalletBinding(),
+    ),
+    GetPage(name: _Paths.ALL_SESSIONS, page: () => const AllSessionsView()),
   ];
 }

@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "menu": [
+    {
+      "id": "dashboard",
+      "label": "Dashboard",
+      "route": "/admin/dashboard",
+      "permissions": ["analytics.read"]
+    },
+    {
+      "id": "users",
+      "label": "Users",
+      "route": "/admin/users",
+      "permissions": ["users.read"]
+    },
+    {
+      "id": "trainerApplications",
+      "label": "Trainer Applications",
+      "route": "/admin/trainer-applications",
+      "permissions": ["trainers.read"]
+    },
+    {
+      "id": "bookings",
+      "label": "Booking Monitor",
+      "route": "/admin/bookings",
+      "permissions": ["bookings.read"]
+    },
+    {
+      "id": "disputes",
+      "label": "Disputes",
+      "route": "/admin/disputes",
+      "permissions": ["reports.read"]
+    },
+    {
+      "id": "finance",
+      "label": "Finance",
+      "route": "/admin/finance",
+      "permissions": ["finance.read"]
+    },
+    {
+      "id": "marketing",
+      "label": "Marketing",
+      "route": "/admin/marketing",
+      "permissions": ["marketing.read"]
+    },
+    {
+      "id": "content",
+      "label": "Content",
+      "route": "/admin/content",
+      "permissions": ["content.read"]
+    },
+    {
+      "id": "security",
+      "label": "Security",
+      "route": "/admin/security",
+      "permissions": ["system.read"]
+    },
+    {
+      "id": "auditLogs",
+      "label": "Audit Logs",
+      "route": "/admin/audit-logs",
+      "permissions": ["audit.read"]
+    },
+    {
+      "id": "gdpr",
+      "label": "GDPR Requests",
+      "route": "/admin/gdpr",
+      "permissions": ["gdpr.read"]
+    }
+  ]
+}

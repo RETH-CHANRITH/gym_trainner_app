@@ -1,19 +1,10 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import '../controllers/weight_input_controller.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-// ─── Design Tokens (matching home_view) ────────────────────────────────────
-const Color ink = Color(0xFF0A0A0F);
-const Color surface = Color(0xFF111118);
-const Color card = Color(0xFF17171F);
-const Color raised = Color(0xFF1E1E28);
-const Color stroke = Color(0xFF2A2A36);
-const Color neon = Color(0xFFCBFF47);
-const Color coral = Color(0xFFFF5C5C);
-const Color sky = Color(0xFF5CE8FF);
-const Color lilac = Color(0xFFA78BFA);
-const Color muted = Color(0xFF6B6B7E);
+import '../controllers/weight_input_controller.dart';
+import '../../../../config/glass_ui.dart';
 
 class WeightInputView extends GetView<WeightInputController> {
   const WeightInputView({Key? key}) : super(key: key);
@@ -21,91 +12,145 @@ class WeightInputView extends GetView<WeightInputController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ink,
-      appBar: AppBar(
-        backgroundColor: surface,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(CupertinoIcons.back, color: Colors.white),
-          onPressed: () => controller.goBack(),
-        ),
-        centerTitle: true,
-        title: const Text('Your Weight', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+      backgroundColor: kInk,
+      extendBodyBehindAppBar: true,
+      appBar: glassAppBar(
+        title: 'Your Weight',
+        onBack: () => controller.goBack(),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('What is your weight?', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
-            const SizedBox(height: 10),
-            Text('Enter your current weight in kg', style: TextStyle(fontSize: 14, color: muted)),
-            const SizedBox(height: 40),
-            Expanded(
+      body: Stack(
+        children: [
+          Positioned.fill(child: liquidBackground()),
+          Positioned(
+            top: -160,
+            right: -100,
+            child: GlowOrb(color: kCoral, radius: 270),
+          ),
+          Positioned(
+            bottom: -100,
+            left: -80,
+            child: GlowOrb(color: kNeon, radius: 230),
+          ),
+          Positioned(
+            top: 300,
+            left: -40,
+            child: GlowOrb(color: kLilac, radius: 130),
+          ),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Obx(() => Text(
-                    '${controller.weight.value ?? 70}',
-                    style: const TextStyle(fontSize: 72, fontWeight: FontWeight.bold, color: neon),
-                  )),
-                  Text('kg', style: TextStyle(color: muted, fontSize: 16)),
-                  const SizedBox(height: 32),
-                  SliderTheme(
-                    data: SliderTheme.of(context).copyWith(
-                      activeTrackColor: neon,
-                      inactiveTrackColor: stroke,
-                      thumbColor: neon,
-                      overlayColor: neon.withOpacity(0.2),
-                      trackHeight: 6,
-                      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
-                    ),
-                    child: Obx(() => Slider(
-                      value: (controller.weight.value ?? 70).toDouble(),
-                      min: 30,
-                      max: 200,
-                      divisions: 170,
-                      onChanged: (value) => controller.setWeight(value.toInt()),
-                    )),
-                  ),
-                  const SizedBox(height: 40),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: card,
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: stroke),
-                    ),
-                    child: TextField(
-                      controller: controller.weightController,
-                      keyboardType: TextInputType.number,
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
-                      onChanged: (value) { if (value.isNotEmpty) controller.setWeight(int.parse(value)); },
-                      decoration: InputDecoration(
-                        hintText: 'Or enter your weight (kg)',
-                        hintStyle: TextStyle(color: muted),
-                        border: InputBorder.none,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  ShaderMask(
+                    shaderCallback:
+                        (b) => const LinearGradient(
+                          colors: [Colors.white, kNeon],
+                        ).createShader(b),
+                    child: Text(
+                      'What is your\nweight?',
+                      style: GoogleFonts.bebasNeue(
+                        fontSize: 40,
+                        color: Colors.white,
+                        height: 1.05,
+                        letterSpacing: 1.5,
                       ),
                     ),
                   ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Helps us calculate your optimal training load',
+                    style: GoogleFonts.dmSans(fontSize: 13, color: kMuted),
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ShaderMask(
+                          shaderCallback:
+                              (b) => const LinearGradient(
+                                colors: [Colors.white, kNeon],
+                              ).createShader(b),
+                          child: Obx(
+                            () => Text(
+                              '${controller.weight.value ?? 70}',
+                              style: const TextStyle(
+                                fontSize: 80,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          'kilograms',
+                          style: GoogleFonts.dmSans(
+                            color: kMuted,
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(height: 28),
+                        SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            activeTrackColor: kNeon,
+                            inactiveTrackColor: Colors.white.withOpacity(0.10),
+                            thumbColor: kNeon,
+                            overlayColor: kNeon.withOpacity(0.15),
+                            trackHeight: 6,
+                            thumbShape: const RoundSliderThumbShape(
+                              enabledThumbRadius: 12,
+                            ),
+                          ),
+                          child: Obx(
+                            () => Slider(
+                              value: (controller.weight.value ?? 70).toDouble(),
+                              min: 30,
+                              max: 200,
+                              divisions: 170,
+                              onChanged: (v) => controller.setWeight(v.toInt()),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        LiquidTile(
+                          padding: EdgeInsets.zero,
+                          child: TextField(
+                            controller: controller.weightController,
+                            keyboardType: TextInputType.number,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                            ),
+                            onChanged: (v) {
+                              final n = int.tryParse(v);
+                              if (n != null) controller.setWeight(n);
+                            },
+                            decoration: const InputDecoration(
+                              hintText: 'Or type here',
+                              hintStyle: TextStyle(color: kMuted),
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 16,
+                              ),
+                              filled: true,
+                              fillColor: Colors.transparent,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  neonButton(
+                    label: 'Continue',
+                    onPressed: () => controller.nextStep(),
+                  ),
+                  const SizedBox(height: 8),
                 ],
               ),
             ),
-            SizedBox(
-              width: double.infinity,
-              height: 54,
-              child: ElevatedButton(
-                onPressed: () => controller.nextStep(),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: neon,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                ),
-                child: const Text('Continue', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: ink)),
-              ),
-            ),
-            const SizedBox(height: 20),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

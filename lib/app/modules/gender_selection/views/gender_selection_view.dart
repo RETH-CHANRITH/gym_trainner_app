@@ -1,19 +1,10 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import '../controllers/gender_selection_controller.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-// ─── Design Tokens (matching home_view) ────────────────────────────────────
-const Color ink = Color(0xFF0A0A0F);
-const Color surface = Color(0xFF111118);
-const Color card = Color(0xFF17171F);
-const Color raised = Color(0xFF1E1E28);
-const Color stroke = Color(0xFF2A2A36);
-const Color neon = Color(0xFFCBFF47);
-const Color coral = Color(0xFFFF5C5C);
-const Color sky = Color(0xFF5CE8FF);
-const Color lilac = Color(0xFFA78BFA);
-const Color muted = Color(0xFF6B6B7E);
+import '../controllers/gender_selection_controller.dart';
+import '../../../../config/glass_ui.dart';
 
 class GenderSelectionView extends GetView<GenderSelectionController> {
   const GenderSelectionView({Key? key}) : super(key: key);
@@ -21,94 +12,155 @@ class GenderSelectionView extends GetView<GenderSelectionController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ink,
-      appBar: AppBar(
-        backgroundColor: surface,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(CupertinoIcons.back, color: Colors.white),
-          onPressed: () => controller.goBack(),
-        ),
-        centerTitle: true,
-        title: const Text(
-          'Your Gender',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-        ),
+      backgroundColor: kInk,
+      extendBodyBehindAppBar: true,
+      appBar: glassAppBar(
+        title: 'Your Gender',
+        onBack: () => controller.goBack(),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'What is your gender?',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'This helps us personalize your fitness experience',
-              style: TextStyle(fontSize: 14, color: muted),
-            ),
-            const SizedBox(height: 40),
-            Expanded(
+      body: Stack(
+        children: [
+          Positioned.fill(child: liquidBackground()),
+          Positioned(
+            top: -160,
+            right: -100,
+            child: GlowOrb(color: kNeon, radius: 270),
+          ),
+          Positioned(
+            bottom: -100,
+            left: -80,
+            child: GlowOrb(color: kSky, radius: 220),
+          ),
+          Positioned(
+            top: 280,
+            left: -60,
+            child: GlowOrb(color: kLilac, radius: 140),
+          ),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildGenderOption(label: 'Male', value: 'male', icon: CupertinoIcons.person),
-                  const SizedBox(height: 16),
-                  _buildGenderOption(label: 'Female', value: 'female', icon: CupertinoIcons.person),
-                  const SizedBox(height: 16),
-                  _buildGenderOption(label: 'Other', value: 'other', icon: CupertinoIcons.person_2),
+                  ShaderMask(
+                    shaderCallback:
+                        (b) => const LinearGradient(
+                          colors: [Colors.white, kNeon],
+                        ).createShader(b),
+                    child: Text(
+                      'What is your\ngender?',
+                      style: GoogleFonts.bebasNeue(
+                        fontSize: 40,
+                        color: Colors.white,
+                        height: 1.05,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'This helps us personalise your fitness experience',
+                    style: GoogleFonts.dmSans(fontSize: 13, color: kMuted),
+                  ),
+                  const SizedBox(height: 28),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        _buildOption(
+                          label: 'Male',
+                          value: 'male',
+                          icon: Icons.male_rounded,
+                        ),
+                        _buildOption(
+                          label: 'Female',
+                          value: 'female',
+                          icon: Icons.female_rounded,
+                        ),
+                        _buildOption(
+                          label: 'Other',
+                          value: 'other',
+                          icon: Icons.transgender_rounded,
+                        ),
+                      ],
+                    ),
+                  ),
+                  neonButton(
+                    label: 'Continue',
+                    onPressed: () => controller.nextStep(),
+                  ),
+                  const SizedBox(height: 8),
                 ],
               ),
             ),
-            SizedBox(
-              width: double.infinity,
-              height: 54,
-              child: ElevatedButton(
-                onPressed: () => controller.nextStep(),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: neon,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                ),
-                child: const Text('Continue', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: ink)),
-              ),
-            ),
-            const SizedBox(height: 20),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildGenderOption({required String label, required String value, required IconData icon}) {
+  Widget _buildOption({
+    required String label,
+    required String value,
+    required IconData icon,
+  }) {
     return Obx(() {
       final isSelected = controller.selectedGender.value == value;
-      return GestureDetector(
-        onTap: () => controller.selectGender(value),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-          decoration: BoxDecoration(
-            border: Border.all(color: isSelected ? neon : stroke, width: 2),
-            borderRadius: BorderRadius.circular(14),
-            color: isSelected ? neon.withOpacity(0.1) : card,
-          ),
-          child: Row(
-            children: [
-              Icon(icon, size: 32, color: isSelected ? neon : muted),
-              const SizedBox(width: 16),
-              Text(label, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: isSelected ? neon : Colors.white)),
-              const Spacer(),
-              Container(
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: isSelected ? neon : stroke, width: 2),
-                  color: isSelected ? neon : Colors.transparent,
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: GestureDetector(
+          onTap: () => controller.selectGender(value),
+          child: LiquidTile(
+            selected: isSelected,
+            accent: kNeon,
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: (isSelected ? kNeon : Colors.white).withOpacity(
+                      0.12,
+                    ),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    icon,
+                    size: 22,
+                    color: isSelected ? kNeon : kMuted,
+                  ),
                 ),
-                child: isSelected ? const Icon(CupertinoIcons.checkmark, color: ink, size: 16) : null,
-              ),
-            ],
+                const SizedBox(width: 14),
+                Text(
+                  label,
+                  style: GoogleFonts.dmSans(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: isSelected ? kNeon : Colors.white,
+                  ),
+                ),
+                const Spacer(),
+                Container(
+                  width: 22,
+                  height: 22,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: !isSelected ? Colors.white.withOpacity(0.3) : kNeon,
+                      width: 2,
+                    ),
+                    color: isSelected ? kNeon : Colors.transparent,
+                  ),
+                  child:
+                      isSelected
+                          ? const Icon(
+                            Icons.check_rounded,
+                            color: kInk,
+                            size: 14,
+                          )
+                          : null,
+                ),
+              ],
+            ),
           ),
         ),
       );

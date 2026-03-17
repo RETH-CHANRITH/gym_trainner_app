@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "collections": {
+    "users": {
+      "requiredFields": ["role", "accountStatus", "createdAt", "updatedAt"],
+      "roles": ["user", "trainer", "admin", "super_admin"]
+    },
+    "trainerApplications": {
+      "requiredFields": ["userId", "status", "submittedAt"],
+      "statusValues": ["pending", "approved", "rejected"]
+    },
+    "bookings": {
+      "requiredFields": ["userId", "trainerId", "status", "scheduledAt", "createdAt"],
+      "statusValues": ["pending", "confirmed", "completed", "cancelled"]
+    },
+    "transactions": {
+      "requiredFields": ["bookingId", "type", "amount", "status", "createdAt"]
+    },
+    "supportTickets": {
+      "requiredFields": ["userId", "subject", "status", "priority", "createdAt"],
+      "priorityValues": ["low", "normal", "high", "urgent"]
+    },
+    "reports": {
+      "requiredFields": ["type", "status", "createdAt"]
+    },
+    "payouts": {
+      "requiredFields": ["trainerId", "amount", "status", "requestedAt"]
+    },
+    "gdprRequests": {
+      "requiredFields": ["userId", "status", "createdAt"],
+      "statusValues": ["received", "identity-verified", "completed", "rejected"]
+    },
+    "auditLogs": {
+      "requiredFields": ["actorId", "action", "requestId", "status", "createdAt"],
+      "immutable": true
+    }
+  }
+}

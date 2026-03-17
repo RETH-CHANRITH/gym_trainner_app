@@ -1,146 +1,315 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/login_controller.dart';
 import '../../../routes/app_pages.dart';
-
-// ─── Design Tokens (matching home_view) ────────────────────────────────────────
-const Color ink = Color(0xFF0A0A0F);
-const Color surface = Color(0xFF111118);
-const Color card = Color(0xFF17171F);
-const Color raised = Color(0xFF1E1E28);
-const Color stroke = Color(0xFF2A2A36);
-const Color neon = Color(0xFFCBFF47);
-const Color coral = Color(0xFFFF5C5C);
-const Color sky = Color(0xFF5CE8FF);
-const Color lilac = Color(0xFFA78BFA);
-const Color muted = Color(0xFF6B6B7E);
+import '../../../../config/glass_ui.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
+
+  // ─── Design Tokens (matching home_view) ────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-
     return Scaffold(
-      backgroundColor: ink,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 40),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Logo / Header
-                Center(
-                  child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: neon.withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: neon, width: 2),
+      backgroundColor: kInk,
+      extendBodyBehindAppBar: true,
+      appBar: glassAppBar(title: 'Welcome Back', onBack: () => Get.back()),
+      body: Stack(
+        children: [
+          Positioned.fill(child: liquidBackground()),
+          Positioned(
+            top: -160,
+            left: -100,
+            child: GlowOrb(color: kNeon, radius: 280),
+          ),
+          Positioned(
+            bottom: -100,
+            right: -80,
+            child: GlowOrb(color: kLilac, radius: 240),
+          ),
+          Positioned(
+            top: 340,
+            right: -50,
+            child: GlowOrb(color: kSky, radius: 140),
+          ),
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Glass logo icon
+                  Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(28),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                        child: Container(
+                          width: 100,
+                          height: 100,
+                          decoration: glassDecoration(
+                            radius: 24,
+                            glowColor: kNeon,
+                          ),
+                          child: ShaderMask(
+                            shaderCallback:
+                                (b) => const LinearGradient(
+                                  colors: [Colors.white, kNeon],
+                                ).createShader(b),
+                            child: const Icon(
+                              Icons.fitness_center_rounded,
+                              size: 44,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                    child: const Icon(CupertinoIcons.sportscourt, color: neon, size: 32),
                   ),
-                ),
-                const SizedBox(height: 48),
+                  const SizedBox(height: 36),
 
-                // Title
-                const Text('Welcome Back', style: TextStyle(color: neon, fontSize: 32, fontWeight: FontWeight.w800, letterSpacing: -0.5)),
-                const SizedBox(height: 8),
-                Text('Sign in to your account', style: TextStyle(color: muted, fontSize: 14, fontWeight: FontWeight.w400)),
-                const SizedBox(height: 40),
-
-                // Email Field
-                Text('Email Address', style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12, fontWeight: FontWeight.w600)),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  style: const TextStyle(color: Colors.white, fontSize: 15),
-                  decoration: InputDecoration(
-                    hintText: 'Enter your email',
-                    hintStyle: TextStyle(color: muted),
-                    prefixIcon: Icon(CupertinoIcons.mail, color: muted),
-                    filled: true,
-                    fillColor: card,
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: stroke)),
-                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: stroke)),
-                    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: neon, width: 2)),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                // Password Field
-                Text('Password', style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12, fontWeight: FontWeight.w600)),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  style: const TextStyle(color: Colors.white, fontSize: 15),
-                  decoration: InputDecoration(
-                    hintText: 'Enter your password',
-                    hintStyle: TextStyle(color: muted),
-                    prefixIcon: Icon(CupertinoIcons.lock, color: muted),
-                    filled: true,
-                    fillColor: card,
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: stroke)),
-                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: stroke)),
-                    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: neon, width: 2)),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Forgot Password
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                    child: Text('Forgot password?', style: TextStyle(color: neon.withOpacity(0.8), fontSize: 13, fontWeight: FontWeight.w500)),
-                  ),
-                ),
-
-                const SizedBox(height: 36),
-
-                // Sign In Button
-                SizedBox(
-                  width: double.infinity,
-                  height: 54,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: neon,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  // Title
+                  ShaderMask(
+                    shaderCallback:
+                        (b) => const LinearGradient(
+                          colors: [Colors.white, kNeon],
+                        ).createShader(b),
+                    child: Text(
+                      'Welcome\nBack',
+                      style: GoogleFonts.bebasNeue(
+                        fontSize: 46,
+                        color: Colors.white,
+                        height: 1.05,
+                        letterSpacing: 2,
+                      ),
                     ),
-                    onPressed: () => Get.offNamed(Routes.HOME),
-                    child: const Text('Login', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ink, letterSpacing: 0.5)),
                   ),
-                ),
-                const SizedBox(height: 20),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Sign in to your account',
+                    style: GoogleFonts.dmSans(color: kMuted, fontSize: 14),
+                  ),
+                  const SizedBox(height: 32),
 
-                // Sign Up Link
-                Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  // Email
+                  Text(
+                    'Email Address',
+                    style: GoogleFonts.dmSans(
+                      color: Colors.white.withOpacity(0.8),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                      child: TextField(
+                        controller: controller.emailController,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                        ),
+                        decoration: glassFieldDecoration(
+                          hint: 'Enter your email',
+                          icon: CupertinoIcons.mail,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+
+                  // Password
+                  Text(
+                    'Password',
+                    style: GoogleFonts.dmSans(
+                      color: Colors.white.withOpacity(0.8),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                      child: TextField(
+                        controller: controller.passwordController,
+                        obscureText: true,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                        ),
+                        decoration: glassFieldDecoration(
+                          hint: 'Enter your password',
+                          icon: CupertinoIcons.lock,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Forgot password
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Forgot password?',
+                        style: GoogleFonts.dmSans(
+                          color: kNeon.withOpacity(0.8),
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Login CTA
+                  neonButton(
+                    label: 'Login',
+                    onPressed: controller.login,
+                    child: Obx(
+                      () =>
+                          controller.isLoading.value
+                              ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  color: kInk,
+                                  strokeWidth: 2.5,
+                                ),
+                              )
+                              : Text(
+                                'Login',
+                                style: GoogleFonts.dmSans(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: kInk,
+                                ),
+                              ),
+                    ),
+                  ),
+                  const SizedBox(height: 22),
+
+                  // OR divider
+                  Row(
                     children: [
-                      Text("Don't have an account? ", style: TextStyle(color: muted, fontSize: 14)),
-                      GestureDetector(
-                        onTap: () => Get.toNamed(Routes.SIGN_UP),
-                        child: const Text('Sign Up', style: TextStyle(color: neon, fontSize: 14, fontWeight: FontWeight.w600)),
+                      Expanded(
+                        child: Divider(color: Colors.white.withOpacity(0.1)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Text(
+                          'OR',
+                          style: GoogleFonts.dmSans(
+                            color: kMuted,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Divider(color: Colors.white.withOpacity(0.1)),
                       ),
                     ],
                   ),
-                ),
-              ],
+                  const SizedBox(height: 18),
+
+                  // Google sign-in
+                  SizedBox(
+                    width: double.infinity,
+                    height: 54,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(28),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(
+                              color: Colors.white.withOpacity(0.30),
+                            ),
+                            backgroundColor: Colors.white.withOpacity(0.12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(28),
+                            ),
+                          ),
+                          onPressed: controller.signInWithGoogle,
+                          child: Obx(
+                            () =>
+                                controller.isGoogleLoading.value
+                                    ? const SizedBox(
+                                      width: 22,
+                                      height: 22,
+                                      child: CircularProgressIndicator(
+                                        color: kNeon,
+                                        strokeWidth: 2.5,
+                                      ),
+                                    )
+                                    : Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/icons/google_logo.svg',
+                                          width: 22,
+                                          height: 22,
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Text(
+                                          'Continue with Google',
+                                          style: GoogleFonts.dmSans(
+                                            color: Colors.white,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 22),
+
+                  // Sign-up link
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don't have an account? ",
+                          style: GoogleFonts.dmSans(
+                            color: kMuted,
+                            fontSize: 14,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () => Get.toNamed(Routes.SIGN_UP),
+                          child: Text(
+                            'Sign Up',
+                            style: GoogleFonts.dmSans(
+                              color: kNeon,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

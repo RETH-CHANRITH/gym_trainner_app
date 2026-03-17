@@ -2,6 +2,8 @@ part of 'app_pages.dart';
 
 abstract class Routes {
   Routes._();
+  static const SPLASH = _Paths.SPLASH;
+  static const ONBOARDING = _Paths.ONBOARDING;
   static const HOME = _Paths.HOME;
   static const FAVORITE = _Paths.FAVORITE;
   static const WALLET = _Paths.WALLET;
@@ -22,10 +24,21 @@ abstract class Routes {
   static const FITNESS_LEVEL = _Paths.FITNESS_LEVEL;
   static const NOTIFICATION_PERMISSION = _Paths.NOTIFICATION_PERMISSION;
   static const PROFILE_SUMMARY = _Paths.PROFILE_SUMMARY;
+  static const BOOK_SESSION = _Paths.BOOK_SESSION;
+  static const MY_BOOKINGS = _Paths.MY_BOOKINGS;
+  static const SEARCH = _Paths.SEARCH;
+  static const SETTINGS = _Paths.SETTINGS;
+  static const NOTIFICATIONS = _Paths.NOTIFICATIONS;
+  static const TX_HISTORY = _Paths.TX_HISTORY;
+  static const ALL_SESSIONS = _Paths.ALL_SESSIONS;
+  static const TRAINER_DASHBOARD = _Paths.TRAINER_DASHBOARD;
+  static const ADMIN_DASHBOARD = _Paths.ADMIN_DASHBOARD;
 }
 
 abstract class _Paths {
   _Paths._();
+  static const SPLASH = '/splash';
+  static const ONBOARDING = '/onboarding';
   static const HOME = '/home';
   static const FAVORITE = '/favorite';
   static const WALLET = '/wallet';
@@ -46,4 +59,13 @@ abstract class _Paths {
   static const FITNESS_LEVEL = '/fitness-level';
   static const NOTIFICATION_PERMISSION = '/notification-permission';
   static const PROFILE_SUMMARY = '/profile-summary';
+  static const BOOK_SESSION = '/book-session';
+  static const MY_BOOKINGS = '/my-bookings';
+  static const ALL_SESSIONS = '/all-sessions';
+  static const SEARCH = '/search';
+  static const SETTINGS = '/settings';
+  static const NOTIFICATIONS = '/notifications';
+  static const TX_HISTORY = '/tx-history';
+  static const TRAINER_DASHBOARD = '/trainer-dashboard';
+  static const ADMIN_DASHBOARD = '/admin-dashboard';
 }

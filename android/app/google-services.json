@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "161341028310",
+    "project_id": "gym-trainer-booking-app",
+    "storage_bucket": "gym-trainer-booking-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:161341028310:android:5a78fc02ad80e0e12f5677",
+        "android_client_info": {
+          "package_name": "Trainer.Booking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "161341028310-ibfsnvc6lc7plqhejqtt9jfo2c2al103.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQpLSnTXKA0xzo19bmP7PXnOS-spiqUUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "161341028310-ibfsnvc6lc7plqhejqtt9jfo2c2al103.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:161341028310:android:38746302857c1c462f5677",
+        "android_client_info": {
+          "package_name": "com.example.gym_trainer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "161341028310-huh3gqertt3pgbgu1bvps3dputc7objt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gym_trainer",
+            "certificate_hash": "d9ee2dd72796711d940889e231709c10899d68b4"
+          }
+        },
+        {
+          "client_id": "161341028310-ibfsnvc6lc7plqhejqtt9jfo2c2al103.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQpLSnTXKA0xzo19bmP7PXnOS-spiqUUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "161341028310-ibfsnvc6lc7plqhejqtt9jfo2c2al103.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

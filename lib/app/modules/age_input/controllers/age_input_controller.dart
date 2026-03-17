@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../services/user_profile_service.dart';
 
 class AgeInputController extends GetxController {
   var age = Rx<int?>(null);
@@ -12,6 +13,7 @@ class AgeInputController extends GetxController {
 
   void nextStep() {
     if (age.value != null && age.value! > 0 && age.value! < 150) {
+      Get.find<UserProfileService>().age.value = age.value!;
       Get.toNamed('/weight-input');
     } else {
       Get.snackbar('Error', 'Please enter a valid age');

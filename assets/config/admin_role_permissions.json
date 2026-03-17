@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "roles": {
+    "super_admin": {
+      "description": "Full platform control",
+      "permissions": ["*"]
+    },
+    "admin": {
+      "description": "Operational admin",
+      "permissions": [
+        "users.read",
+        "users.write",
+        "trainers.read",
+        "trainers.write",
+        "bookings.read",
+        "bookings.write",
+        "support.read",
+        "support.write",
+        "analytics.read",
+        "system.read"
+      ]
+    },
+    "support_admin": {
+      "description": "Support and GDPR operations",
+      "permissions": [
+        "users.read",
+        "support.read",
+        "support.write",
+        "gdpr.read",
+        "gdpr.write"
+      ]
+    },
+    "finance_admin": {
+      "description": "Finance and payouts",
+      "permissions": [
+        "finance.read",
+        "finance.write",
+        "refunds.read",
+        "refunds.write",
+        "payouts.read",
+        "payouts.write"
+      ]
+    },
+    "moderator": {
+      "description": "Community and reports moderation",
+      "permissions": [
+        "community.read",
+        "community.write",
+        "reports.read",
+        "reports.write",
+        "users.read"
+      ]
+    },
+    "read_only_admin": {
+      "description": "Read-only analytics and audits",
+      "permissions": [
+        "users.read",
+        "trainers.read",
+        "bookings.read",
+        "analytics.read",
+        "audit.read"
+      ]
+    }
+  }
+}

@@ -1,11 +1,9 @@
 import 'package:get/get.dart';
-import 'package:gym_trainer/app/modules/favourite/controllers/favourite_controller.dart';
+import 'package:gym_trainer/app/modules/favorite/controllers/favorite_controller.dart';
 
-class FavouriteControllerBinding extends Bindings {
+class FavoriteControllerBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<FavouriteController>(
-      () => FavouriteController(),
-    );
+    Get.lazyPut<FavoriteController>(() => FavoriteController());
   }
 }

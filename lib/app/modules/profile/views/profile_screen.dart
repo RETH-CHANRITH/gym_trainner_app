@@ -1,5 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import '../../../services/user_profile_service.dart';
 
 const Color ink = Color(0xFF0A0A0F);
 const Color surface = Color(0xFF111118);
@@ -20,6 +24,132 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late final UserProfileService _profile;
+
+  @override
+  void initState() {
+    super.initState();
+    _profile = Get.find<UserProfileService>();
+  }
+
+  void _softTap() => HapticFeedback.selectionClick();
+
+  Future<void> _showInfoSheet({
+    required String title,
+    required String message,
+  }) async {
+    _softTap();
+    await showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder:
+          (_) => Container(
+            decoration: const BoxDecoration(
+              color: card,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
+            ),
+            padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: stroke,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(message, style: TextStyle(color: muted, fontSize: 13)),
+                const SizedBox(height: 18),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: neon,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'Got it',
+                      style: TextStyle(color: ink, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+    );
+  }
+
+  Future<void> _handleMenuTap(String label) async {
+    _softTap();
+    switch (label) {
+      case 'Edit Profile':
+        Get.toNamed('/profile-summary');
+        return;
+      case 'Subscription':
+        Get.toNamed('/wallet');
+        return;
+      case 'Notifications':
+        Get.toNamed('/notifications');
+        return;
+      case 'Privacy & Security':
+        Get.toNamed('/settings');
+        return;
+      case 'Help & Support':
+        await _showInfoSheet(
+          title: 'Help & Support',
+          message:
+              'Need help with your account, booking, or payment? Open Settings and tap Help & Support to submit a ticket directly.',
+        );
+        return;
+      case 'Log Out':
+        await _handleLogout(context);
+        return;
+      default:
+        return;
+    }
+  }
+
+  void _handleStatsTap(String type) {
+    _softTap();
+    switch (type) {
+      case 'sessions':
+        Get.toNamed('/my-bookings');
+        break;
+      case 'trainers':
+        Get.toNamed('/favorite');
+        break;
+      case 'workout':
+        Get.toNamed('/all-sessions');
+        break;
+    }
+  }
+
+  Future<void> _showAllGoals() async {
+    await _showInfoSheet(
+      title: 'My Goals',
+      message:
+          'You are tracking 4 goals: Lose Weight, Build Muscle, Flexibility, and Endurance. Goal editing and custom goals are coming next.',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,26 +181,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Row(
         children: [
           Container(
-            width: 48, height: 48,
+            width: 48,
+            height: 48,
             decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [lilac.withOpacity(0.2), lilac.withOpacity(0.05)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              gradient: LinearGradient(
+                colors: [lilac.withOpacity(0.2), lilac.withOpacity(0.05)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
               borderRadius: BorderRadius.circular(14),
               border: Border.all(color: lilac.withOpacity(0.3)),
             ),
-            child: const Icon(CupertinoIcons.person_fill, color: lilac, size: 22),
+            child: const Icon(
+              CupertinoIcons.person_fill,
+              color: lilac,
+              size: 22,
+            ),
           ),
           const SizedBox(width: 16),
           const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('My Profile', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w800, letterSpacing: -0.5)),
+                Text(
+                  'My Profile',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.5,
+                  ),
+                ),
                 SizedBox(height: 2),
-                Text('Manage your account', style: TextStyle(color: muted, fontSize: 13)),
+                Text(
+                  'Manage your account',
+                  style: TextStyle(color: muted, fontSize: 13),
+                ),
               ],
             ),
           ),
-          _iconButton(CupertinoIcons.settings, () {}),
+          _iconButton(CupertinoIcons.settings, () => Get.toNamed('/settings')),
         ],
       ),
     );
@@ -84,8 +234,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         borderRadius: BorderRadius.circular(12),
         onTap: onTap,
         child: Container(
-          width: 44, height: 44,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), border: Border.all(color: stroke)),
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: stroke),
+          ),
           child: Icon(icon, color: Colors.white70, size: 20),
         ),
       ),
@@ -108,7 +262,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(24),
-          onTap: () {},
+          onTap: () => _handleMenuTap('Edit Profile'),
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Row(
@@ -119,29 +273,65 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Container(
                       padding: const EdgeInsets.all(3),
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: [neon, neon.withOpacity(0.5)]),
+                        gradient: LinearGradient(
+                          colors: [neon, neon.withOpacity(0.5)],
+                        ),
                         borderRadius: BorderRadius.circular(22),
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(19),
                         child: SizedBox(
-                          width: 72, height: 72,
-                          child: Image.network(
-                            'https://randomuser.me/api/portraits/women/44.jpg',
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Container(color: raised, child: const Icon(CupertinoIcons.person_fill, color: muted, size: 32)),
+                          width: 72,
+                          height: 72,
+                          child: Obx(
+                            () =>
+                                _profile.photoUrl.value.isNotEmpty
+                                    ? Image.network(
+                                      _profile.photoUrl.value,
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (_, __, ___) => Container(
+                                            color: raised,
+                                            child: const Icon(
+                                              CupertinoIcons.person_fill,
+                                              color: muted,
+                                              size: 32,
+                                            ),
+                                          ),
+                                    )
+                                    : Container(
+                                      color: raised,
+                                      child: const Icon(
+                                        CupertinoIcons.person_fill,
+                                        color: muted,
+                                        size: 32,
+                                      ),
+                                    ),
                           ),
                         ),
                       ),
                     ),
-                    Positioned(bottom: 0, right: 0,
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
                       child: Container(
                         padding: const EdgeInsets.all(2),
-                        decoration: BoxDecoration(color: card, shape: BoxShape.circle),
+                        decoration: BoxDecoration(
+                          color: card,
+                          shape: BoxShape.circle,
+                        ),
                         child: Container(
-                          width: 18, height: 18,
-                          decoration: BoxDecoration(color: neon, shape: BoxShape.circle),
-                          child: const Icon(CupertinoIcons.checkmark_alt, color: ink, size: 12),
+                          width: 18,
+                          height: 18,
+                          decoration: BoxDecoration(
+                            color: neon,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            CupertinoIcons.checkmark_alt,
+                            color: ink,
+                            size: 12,
+                          ),
                         ),
                       ),
                     ),
@@ -150,33 +340,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(width: 16),
                 // Info
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Sophia Carter', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w800)),
-                      const SizedBox(height: 4),
-                      Text('sophia.carter@example.com', style: TextStyle(color: muted, fontSize: 12)),
-                      const SizedBox(height: 10),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [neon.withOpacity(0.15), neon.withOpacity(0.05)]),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: neon.withOpacity(0.3)),
+                  child: Obx(
+                    () => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _profile.name.value,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(CupertinoIcons.rosette, color: neon, size: 14),
-                            SizedBox(width: 5),
-                            Text('Premium', style: TextStyle(color: neon, fontSize: 11, fontWeight: FontWeight.w700)),
-                          ],
+                        const SizedBox(height: 4),
+                        Text(
+                          _profile.email.value.isNotEmpty
+                              ? _profile.email.value
+                              : 'No email linked',
+                          style: TextStyle(color: muted, fontSize: 12),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 10),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                neon.withOpacity(0.15),
+                                neon.withOpacity(0.05),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: neon.withOpacity(0.3)),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                CupertinoIcons.rosette,
+                                color: neon,
+                                size: 14,
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                'Premium',
+                                style: TextStyle(
+                                  color: neon,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                            Icon(CupertinoIcons.pencil, color: muted, size: 20),
+                Icon(CupertinoIcons.pencil, color: muted, size: 20),
               ],
             ),
           ),
@@ -190,40 +413,84 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
-          _statBox('12', 'Sessions', CupertinoIcons.sportscourt, neon),
+          _statBox(
+            '12',
+            'Sessions',
+            CupertinoIcons.sportscourt,
+            neon,
+            onTap: () => _handleStatsTap('sessions'),
+          ),
           const SizedBox(width: 12),
-          _statBox('3', 'Trainers', CupertinoIcons.person_2, sky),
+          _statBox(
+            '3',
+            'Trainers',
+            CupertinoIcons.person_2,
+            sky,
+            onTap: () => _handleStatsTap('trainers'),
+          ),
           const SizedBox(width: 12),
-          _statBox('24h', 'Workout', CupertinoIcons.timer, lilac),
+          _statBox(
+            '24h',
+            'Workout',
+            CupertinoIcons.timer,
+            lilac,
+            onTap: () => _handleStatsTap('workout'),
+          ),
         ],
       ),
     );
   }
 
-  Widget _statBox(String value, String label, IconData icon, Color color) {
+  Widget _statBox(
+    String value,
+    String label,
+    IconData icon,
+    Color color, {
+    required VoidCallback onTap,
+  }) {
     return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: card,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: stroke),
-        ),
-        child: Column(
-          children: [
-            Container(
-              width: 40, height: 40,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [color.withOpacity(0.15), color.withOpacity(0.05)]),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(icon, color: color, size: 18),
+          onTap: onTap,
+          child: Ink(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: card,
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(color: stroke),
             ),
-            const SizedBox(height: 12),
-            Text(value, style: TextStyle(color: color, fontSize: 20, fontWeight: FontWeight.w800)),
-            const SizedBox(height: 2),
-            Text(label, style: TextStyle(color: muted, fontSize: 11)),
-          ],
+            child: Column(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        color.withOpacity(0.15),
+                        color.withOpacity(0.05),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(icon, color: color, size: 18),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  value,
+                  style: TextStyle(
+                    color: color,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(label, style: TextStyle(color: muted, fontSize: 11)),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -238,11 +505,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('My Goals', style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w800)),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(color: neon.withOpacity(0.12), borderRadius: BorderRadius.circular(8)),
-                child: const Text('View All', style: TextStyle(color: neon, fontSize: 11, fontWeight: FontWeight.w700)),
+              const Text(
+                'My Goals',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              GestureDetector(
+                onTap: _showAllGoals,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: neon.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(
+                    'View All',
+                    style: TextStyle(
+                      color: neon,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
@@ -255,10 +545,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
             physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.symmetric(horizontal: 20),
             children: [
-              _goalCard('Lose Weight', '5 lbs to go', 0.7, coral, CupertinoIcons.gauge),
-              _goalCard('Build Muscle', '3/5 weeks', 0.6, neon, CupertinoIcons.sportscourt),
-              _goalCard('Flexibility', '80% done', 0.8, sky, CupertinoIcons.person),
-              _goalCard('Endurance', '50% done', 0.5, lilac, CupertinoIcons.bolt),
+              _goalCard(
+                'Lose Weight',
+                '5 lbs to go',
+                0.7,
+                coral,
+                CupertinoIcons.gauge,
+              ),
+              _goalCard(
+                'Build Muscle',
+                '3/5 weeks',
+                0.6,
+                neon,
+                CupertinoIcons.sportscourt,
+              ),
+              _goalCard(
+                'Flexibility',
+                '80% done',
+                0.8,
+                sky,
+                CupertinoIcons.person,
+              ),
+              _goalCard(
+                'Endurance',
+                '50% done',
+                0.5,
+                lilac,
+                CupertinoIcons.bolt,
+              ),
             ],
           ),
         ),
@@ -266,13 +580,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _goalCard(String title, String subtitle, double progress, Color color, IconData icon) {
+  Widget _goalCard(
+    String title,
+    String subtitle,
+    double progress,
+    Color color,
+    IconData icon,
+  ) {
     return Container(
       width: 150,
       margin: const EdgeInsets.only(right: 12),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [color.withOpacity(0.1), color.withOpacity(0.02)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+        gradient: LinearGradient(
+          colors: [color.withOpacity(0.1), color.withOpacity(0.02)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: color.withOpacity(0.25)),
       ),
@@ -283,7 +607,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               Icon(icon, color: color, size: 16),
               const SizedBox(width: 6),
-              Expanded(child: Text(title, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700), maxLines: 1, overflow: TextOverflow.ellipsis)),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 8),
@@ -311,12 +646,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           const Padding(
             padding: EdgeInsets.only(left: 4, bottom: 14),
-            child: Text('Settings', style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w800)),
+            child: Text(
+              'Settings',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
           ),
           ..._menuItems().asMap().entries.map((e) => _menuTile(e.value, e.key)),
         ],
       ),
     );
+  }
+
+  Future<void> _handleLogout(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder:
+          (_) => AlertDialog(
+            backgroundColor: card,
+            title: const Text('Log Out', style: TextStyle(color: Colors.white)),
+            content: const Text(
+              'Are you sure you want to log out?',
+              style: TextStyle(color: muted),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Cancel', style: TextStyle(color: muted)),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text(
+                  'Log Out',
+                  style: TextStyle(color: Color(0xFFFF5C5C)),
+                ),
+              ),
+            ],
+          ),
+    );
+    if (confirmed != true) return;
+    await FirebaseAuth.instance.signOut();
+    Get.offAllNamed('/login');
   }
 
   Widget _menuTile(Map<String, dynamic> item, int index) {
@@ -344,34 +717,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(16),
-            onTap: () {},
+            onTap: () => _handleMenuTap(item['label'] as String),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               child: Row(
                 children: [
                   Container(
-                    width: 42, height: 42,
+                    width: 42,
+                    height: 42,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [color.withOpacity(0.15), color.withOpacity(0.05)]),
+                      gradient: LinearGradient(
+                        colors: [
+                          color.withOpacity(0.15),
+                          color.withOpacity(0.05),
+                        ],
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Icon(item['icon'] as IconData, color: color, size: 18),
+                    child: Icon(
+                      item['icon'] as IconData,
+                      color: color,
+                      size: 18,
+                    ),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(item['label'] as String, style: TextStyle(color: isDanger ? coral : Colors.white, fontSize: 14, fontWeight: FontWeight.w600)),
+                        Text(
+                          item['label'] as String,
+                          style: TextStyle(
+                            color: isDanger ? coral : Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                         if (item['subtitle'] != null)
                           Padding(
                             padding: const EdgeInsets.only(top: 2),
-                            child: Text(item['subtitle'] as String, style: TextStyle(color: muted, fontSize: 11)),
+                            child: Text(
+                              item['subtitle'] as String,
+                              style: TextStyle(color: muted, fontSize: 11),
+                            ),
                           ),
                       ],
                     ),
                   ),
-                  Icon(CupertinoIcons.chevron_right, color: isDanger ? coral.withOpacity(0.5) : muted, size: 20),
+                  Icon(
+                    CupertinoIcons.chevron_right,
+                    color: isDanger ? coral.withOpacity(0.5) : muted,
+                    size: 20,
+                  ),
                 ],
               ),
             ),
@@ -382,11 +779,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   List<Map<String, dynamic>> _menuItems() => [
-    {'icon': CupertinoIcons.person, 'label': 'Edit Profile', 'subtitle': 'Update your information', 'color': neon, 'danger': false},
-    {'icon': CupertinoIcons.creditcard, 'label': 'Subscription', 'subtitle': 'Premium - Renews Mar 15', 'color': sky, 'danger': false},
-    {'icon': CupertinoIcons.bell, 'label': 'Notifications', 'subtitle': 'Manage alerts', 'color': lilac, 'danger': false},
-    {'icon': CupertinoIcons.shield, 'label': 'Privacy & Security', 'subtitle': null, 'color': Colors.white54, 'danger': false},
-    {'icon': CupertinoIcons.question_circle, 'label': 'Help & Support', 'subtitle': null, 'color': Colors.white54, 'danger': false},
-    {'icon': CupertinoIcons.square_arrow_right, 'label': 'Log Out', 'subtitle': null, 'color': coral, 'danger': true},
+    {
+      'icon': CupertinoIcons.person,
+      'label': 'Edit Profile',
+      'subtitle': 'Update your information',
+      'color': neon,
+      'danger': false,
+    },
+    {
+      'icon': CupertinoIcons.creditcard,
+      'label': 'Subscription',
+      'subtitle': 'Premium - Renews Mar 15',
+      'color': sky,
+      'danger': false,
+    },
+    {
+      'icon': CupertinoIcons.bell,
+      'label': 'Notifications',
+      'subtitle': 'Manage alerts',
+      'color': lilac,
+      'danger': false,
+    },
+    {
+      'icon': CupertinoIcons.shield,
+      'label': 'Privacy & Security',
+      'subtitle': null,
+      'color': Colors.white54,
+      'danger': false,
+    },
+    {
+      'icon': CupertinoIcons.question_circle,
+      'label': 'Help & Support',
+      'subtitle': null,
+      'color': Colors.white54,
+      'danger': false,
+    },
+    {
+      'icon': CupertinoIcons.square_arrow_right,
+      'label': 'Log Out',
+      'subtitle': null,
+      'color': coral,
+      'danger': true,
+    },
   ];
 }

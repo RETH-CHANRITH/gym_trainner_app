@@ -30,22 +30,65 @@ class _MessagingScreenState extends State<MessagingScreen> {
   ];
 
   static const List<Map<String, dynamic>> _conversations = [
-    {'name': 'Alex Carter', 'specialty': 'Strength Coach', 'message': 'Ready for today\'s HIIT session?', 'time': '2m', 'unread': 2, 'online': true, 'portrait': 10},
-    {'name': 'Jordan Miles', 'specialty': 'Yoga Instructor', 'message': 'Great progress on flexibility!', 'time': '1h', 'unread': 1, 'online': true, 'portrait': 11},
-    {'name': 'Sam Rivera', 'specialty': 'Boxing Coach', 'message': 'See you tomorrow at 7am', 'time': '3h', 'unread': 0, 'online': false, 'portrait': 12},
-    {'name': 'Chris Lee', 'specialty': 'Powerlifting', 'message': 'Your form looked great today', 'time': '1d', 'unread': 0, 'online': true, 'portrait': 13},
-    {'name': 'Priya Shah', 'specialty': 'Pilates Expert', 'message': 'Don\'t forget to hydrate!', 'time': '2d', 'unread': 0, 'online': false, 'portrait': 47},
+    {
+      'name': 'Alex Carter',
+      'specialty': 'Strength Coach',
+      'message': 'Ready for today\'s HIIT session?',
+      'time': '2m',
+      'unread': 2,
+      'online': true,
+      'portrait': 10,
+    },
+    {
+      'name': 'Jordan Miles',
+      'specialty': 'Yoga Instructor',
+      'message': 'Great progress on flexibility!',
+      'time': '1h',
+      'unread': 1,
+      'online': true,
+      'portrait': 11,
+    },
+    {
+      'name': 'Sam Rivera',
+      'specialty': 'Boxing Coach',
+      'message': 'See you tomorrow at 7am',
+      'time': '3h',
+      'unread': 0,
+      'online': false,
+      'portrait': 12,
+    },
+    {
+      'name': 'Chris Lee',
+      'specialty': 'Powerlifting',
+      'message': 'Your form looked great today',
+      'time': '1d',
+      'unread': 0,
+      'online': true,
+      'portrait': 13,
+    },
+    {
+      'name': 'Priya Shah',
+      'specialty': 'Pilates Expert',
+      'message': 'Don\'t forget to hydrate!',
+      'time': '2d',
+      'unread': 0,
+      'online': false,
+      'portrait': 47,
+    },
   ];
 
   List<Map<String, dynamic>> get _filtered {
-    if (_tabIndex == 1) return _conversations.where((c) => (c['unread'] as int) > 0).toList();
-    if (_tabIndex == 2) return _conversations.where((c) => c['online'] == true).toList();
+    if (_tabIndex == 1)
+      return _conversations.where((c) => (c['unread'] as int) > 0).toList();
+    if (_tabIndex == 2)
+      return _conversations.where((c) => c['online'] == true).toList();
     return _conversations;
   }
 
   @override
   Widget build(BuildContext context) {
-    final unreadCount = _conversations.where((c) => (c['unread'] as int) > 0).length;
+    final unreadCount =
+        _conversations.where((c) => (c['unread'] as int) > 0).length;
     return Scaffold(
       backgroundColor: ink,
       body: SafeArea(
@@ -57,14 +100,17 @@ class _MessagingScreenState extends State<MessagingScreen> {
             _buildTabs(),
             const SizedBox(height: 20),
             Expanded(
-              child: _filtered.isEmpty
-                  ? _buildEmptyState()
-                  : ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-                      itemCount: _filtered.length,
-                      itemBuilder: (context, index) => _buildConversationCard(_filtered[index], index),
-                    ),
+              child:
+                  _filtered.isEmpty
+                      ? _buildEmptyState()
+                      : ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+                        itemCount: _filtered.length,
+                        itemBuilder:
+                            (context, index) =>
+                                _buildConversationCard(_filtered[index], index),
+                      ),
             ),
           ],
         ),
@@ -78,22 +124,42 @@ class _MessagingScreenState extends State<MessagingScreen> {
       child: Row(
         children: [
           Container(
-            width: 48, height: 48,
+            width: 48,
+            height: 48,
             decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [sky.withOpacity(0.2), sky.withOpacity(0.05)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              gradient: LinearGradient(
+                colors: [sky.withOpacity(0.2), sky.withOpacity(0.05)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
               borderRadius: BorderRadius.circular(14),
               border: Border.all(color: sky.withOpacity(0.3)),
             ),
-            child: const Icon(CupertinoIcons.chat_bubble_fill, color: sky, size: 22),
+            child: const Icon(
+              CupertinoIcons.chat_bubble_fill,
+              color: sky,
+              size: 22,
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Messages', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w800, letterSpacing: -0.5)),
+                const Text(
+                  'Messages',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.5,
+                  ),
+                ),
                 const SizedBox(height: 2),
-                Text('${_conversations.length} conversations', style: TextStyle(color: muted, fontSize: 13)),
+                Text(
+                  '${_conversations.length} conversations',
+                  style: TextStyle(color: muted, fontSize: 13),
+                ),
               ],
             ),
           ),
@@ -108,9 +174,23 @@ class _MessagingScreenState extends State<MessagingScreen> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(width: 8, height: 8, decoration: const BoxDecoration(color: coral, shape: BoxShape.circle)),
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: coral,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
                   const SizedBox(width: 6),
-                  Text('$unreadCount new', style: const TextStyle(color: coral, fontSize: 12, fontWeight: FontWeight.w700)),
+                  Text(
+                    '$unreadCount new',
+                    style: const TextStyle(
+                      color: coral,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -144,9 +224,20 @@ class _MessagingScreenState extends State<MessagingScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(_tabs[i]['icon'] as IconData, color: active ? ink : muted, size: 16),
+                    Icon(
+                      _tabs[i]['icon'] as IconData,
+                      color: active ? ink : muted,
+                      size: 16,
+                    ),
                     const SizedBox(width: 6),
-                    Text(_tabs[i]['label'] as String, style: TextStyle(color: active ? ink : Colors.white70, fontSize: 12, fontWeight: FontWeight.w600)),
+                    Text(
+                      _tabs[i]['label'] as String,
+                      style: TextStyle(
+                        color: active ? ink : Colors.white70,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -163,14 +254,29 @@ class _MessagingScreenState extends State<MessagingScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 80, height: 80,
-            decoration: BoxDecoration(color: card, shape: BoxShape.circle, border: Border.all(color: stroke)),
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              color: card,
+              shape: BoxShape.circle,
+              border: Border.all(color: stroke),
+            ),
             child: Icon(CupertinoIcons.chat_bubble, color: muted, size: 36),
           ),
           const SizedBox(height: 20),
-          const Text('No messages', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700)),
+          const Text(
+            'No messages',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
           const SizedBox(height: 8),
-          Text('Start a conversation with a trainer', style: TextStyle(color: muted, fontSize: 14)),
+          Text(
+            'Start a conversation with a trainer',
+            style: TextStyle(color: muted, fontSize: 14),
+          ),
         ],
       ),
     );
@@ -194,19 +300,30 @@ class _MessagingScreenState extends State<MessagingScreen> {
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
-          gradient: hasUnread
-              ? LinearGradient(colors: [neon.withOpacity(0.08), card], begin: Alignment.centerLeft, end: Alignment.centerRight)
-              : null,
+          gradient:
+              hasUnread
+                  ? LinearGradient(
+                    colors: [neon.withOpacity(0.08), card],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  )
+                  : null,
           color: hasUnread ? null : card,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: hasUnread ? neon.withOpacity(0.3) : stroke),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 10, offset: const Offset(0, 4))],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.15),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(20),
-            onTap: () => Get.toNamed('/message-screen'),
+            onTap: () => Get.toNamed('/message-screen', arguments: conv),
             child: Padding(
               padding: const EdgeInsets.all(14),
               child: Row(
@@ -217,29 +334,52 @@ class _MessagingScreenState extends State<MessagingScreen> {
                       Container(
                         padding: const EdgeInsets.all(2),
                         decoration: BoxDecoration(
-                          gradient: isOnline
-                              ? LinearGradient(colors: [neon, neon.withOpacity(0.5)])
-                              : LinearGradient(colors: [stroke, stroke.withOpacity(0.5)]),
+                          gradient:
+                              isOnline
+                                  ? LinearGradient(
+                                    colors: [neon, neon.withOpacity(0.5)],
+                                  )
+                                  : LinearGradient(
+                                    colors: [stroke, stroke.withOpacity(0.5)],
+                                  ),
                           shape: BoxShape.circle,
                         ),
                         child: ClipOval(
                           child: SizedBox(
-                            width: 52, height: 52,
+                            width: 52,
+                            height: 52,
                             child: Image.network(
                               'https://randomuser.me/api/portraits/men/${conv['portrait']}.jpg',
                               fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => Container(color: raised, child: const Icon(CupertinoIcons.person_fill, color: muted, size: 24)),
+                              errorBuilder:
+                                  (_, __, ___) => Container(
+                                    color: raised,
+                                    child: const Icon(
+                                      CupertinoIcons.person_fill,
+                                      color: muted,
+                                      size: 24,
+                                    ),
+                                  ),
                             ),
                           ),
                         ),
                       ),
-                      Positioned(bottom: 0, right: 0,
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
                         child: Container(
                           padding: const EdgeInsets.all(2),
-                          decoration: BoxDecoration(color: card, shape: BoxShape.circle),
+                          decoration: BoxDecoration(
+                            color: card,
+                            shape: BoxShape.circle,
+                          ),
                           child: Container(
-                            width: 12, height: 12,
-                            decoration: BoxDecoration(color: isOnline ? neon : muted, shape: BoxShape.circle),
+                            width: 12,
+                            height: 12,
+                            decoration: BoxDecoration(
+                              color: isOnline ? neon : muted,
+                              shape: BoxShape.circle,
+                            ),
                           ),
                         ),
                       ),
@@ -254,29 +394,72 @@ class _MessagingScreenState extends State<MessagingScreen> {
                         Row(
                           children: [
                             Expanded(
-                              child: Text(conv['name'] as String, style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: hasUnread ? FontWeight.w700 : FontWeight.w600)),
+                              child: Text(
+                                conv['name'] as String,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight:
+                                      hasUnread
+                                          ? FontWeight.w700
+                                          : FontWeight.w600,
+                                ),
+                              ),
                             ),
-                            Text(conv['time'] as String, style: TextStyle(color: hasUnread ? neon : muted, fontSize: 11, fontWeight: hasUnread ? FontWeight.w600 : FontWeight.w400)),
+                            Text(
+                              conv['time'] as String,
+                              style: TextStyle(
+                                color: hasUnread ? neon : muted,
+                                fontSize: 11,
+                                fontWeight:
+                                    hasUnread
+                                        ? FontWeight.w600
+                                        : FontWeight.w400,
+                              ),
+                            ),
                           ],
                         ),
                         const SizedBox(height: 2),
-                        Text(conv['specialty'] as String, style: TextStyle(color: muted, fontSize: 11)),
+                        Text(
+                          conv['specialty'] as String,
+                          style: TextStyle(color: muted, fontSize: 11),
+                        ),
                         const SizedBox(height: 6),
                         Row(
                           children: [
                             Expanded(
                               child: Text(
                                 conv['message'] as String,
-                                style: TextStyle(color: hasUnread ? Colors.white : muted, fontSize: 13, fontWeight: hasUnread ? FontWeight.w500 : FontWeight.w400),
+                                style: TextStyle(
+                                  color: hasUnread ? Colors.white : muted,
+                                  fontSize: 13,
+                                  fontWeight:
+                                      hasUnread
+                                          ? FontWeight.w500
+                                          : FontWeight.w400,
+                                ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             if (hasUnread)
                               Container(
-                                width: 22, height: 22,
-                                decoration: const BoxDecoration(color: neon, shape: BoxShape.circle),
-                                child: Center(child: Text('$unread', style: const TextStyle(color: ink, fontSize: 11, fontWeight: FontWeight.w800))),
+                                width: 22,
+                                height: 22,
+                                decoration: const BoxDecoration(
+                                  color: neon,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '$unread',
+                                    style: const TextStyle(
+                                      color: ink,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ),
                               ),
                           ],
                         ),

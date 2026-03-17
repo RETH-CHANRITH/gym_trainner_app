@@ -9,17 +9,51 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  firebase_core: ^3.0.0
+  firebase_auth: ^5.0.0
+  cloud_firestore: ^5.4.4
+  google_sign_in: ^6.2.1
+  flutter_svg: ^2.0.10+1
   get: ^4.7.3
   get_cli: ^1.9.1
   http: ^1.5.0
+  cached_network_image: ^3.4.1
   animated_bottom_navigation_bar: ^1.4.0
   cupertino_icons: ^1.0.8
+  shared_preferences: ^2.3.2
+  google_fonts: ^6.2.1
+  url_launcher: ^6.3.1
+  image_picker: ^1.1.2
+  supabase_flutter: ^2.9.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  flutter_native_splash: ^2.4.1
+  flutter_launcher_icons: ^0.14.3
+
+flutter_native_splash:
+  color: "#1A0330"
+  image: assets/image/logo.png
+  color_dark: "#1A0330"
+  image_dark: assets/image/logo.png
+  android_12:
+    color: "#1A0330"
+    image: assets/image/logo.png
+    icon_background_color: "#1A0330"
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/image/logo.png"
+  adaptive_icon_background: "#0A0A0F"
+  adaptive_icon_foreground: "assets/image/logo.png"
   
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/
+    - assets/icons/
+    - assets/image/

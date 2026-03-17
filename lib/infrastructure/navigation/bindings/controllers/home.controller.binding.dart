@@ -1,12 +1,10 @@
 import 'package:get/get.dart';
 
-import '../../../../presentation/home/controllers/home.controller.dart';
+import 'package:gym_trainer/app/modules/home/controllers/home_controller.dart';
 
 class HomeControllerBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<HomeController>(
-      () => HomeController(),
-    );
+    Get.lazyPut<HomeController>(() => HomeController());
   }
 }

@@ -1,0 +1,112 @@
+[
+  {
+    "id": "ADM-001",
+    "sprint": 1,
+    "title": "Admin access gate with role verification",
+    "description": "Protect admin routes and verify role/permissions using backend session verification endpoint.",
+    "acceptanceCriteria": [
+      "Non-admin users are blocked from admin routes",
+      "Role verification is server-side",
+      "Unauthorized access returns structured error with requestId"
+    ]
+  },
+  {
+    "id": "ADM-002",
+    "sprint": 1,
+    "title": "Admin dashboard shell and permission-aware menu",
+    "description": "Use admin_menu_permissions.json to render only allowed modules.",
+    "acceptanceCriteria": [
+      "Menu items hidden when permission missing",
+      "Dashboard has loading/empty/failure states",
+      "Session check performed on app launch"
+    ]
+  },
+  {
+    "id": "ADM-003",
+    "sprint": 1,
+    "title": "Backend audit log writer utility",
+    "description": "Write immutable auditLogs entry on every admin mutation.",
+    "acceptanceCriteria": [
+      "Includes actor/action/target/before/after/requestId/timestamp",
+      "Audit logs are append-only",
+      "Write failures return safe errors"
+    ]
+  },
+  {
+    "id": "ADM-004",
+    "sprint": 2,
+    "title": "Users list with search/filter/sort/pagination",
+    "description": "Build admin users list with account status chips and profile drawer.",
+    "acceptanceCriteria": [
+      "Pagination cursor supported",
+      "Search by name/email",
+      "Sort by createdAt and status"
+    ]
+  },
+  {
+    "id": "ADM-005",
+    "sprint": 2,
+    "title": "Suspend/reactivate with reason modal",
+    "description": "Implement user moderation actions with mandatory reason for suspension.",
+    "acceptanceCriteria": [
+      "Suspend action requires reason",
+      "Reactivation clears suspended status",
+      "Each mutation creates audit log"
+    ]
+  },
+  {
+    "id": "ADM-006",
+    "sprint": 2,
+    "title": "Trainer application queue details",
+    "description": "Build list/detail view and approve/reject flow with reviewer notes.",
+    "acceptanceCriteria": [
+      "Pending queue filter works",
+      "Approve promotes user role to trainer",
+      "Reject stores reviewer notes"
+    ]
+  },
+  {
+    "id": "ADM-007",
+    "sprint": 3,
+    "title": "Global booking monitor filters",
+    "description": "Provide date/status/trainer filters and admin booking actions.",
+    "acceptanceCriteria": [
+      "Filter + pagination works",
+      "Cancel/reassign are server-side",
+      "Mutation errors return requestId"
+    ]
+  },
+  {
+    "id": "ADM-008",
+    "sprint": 3,
+    "title": "Support and dispute workflow",
+    "description": "Implement support ticket board and dispute assignment/resolution states.",
+    "acceptanceCriteria": [
+      "SLA badge per ticket",
+      "Assign and resolve dispute actions",
+      "Audit log on every status transition"
+    ]
+  },
+  {
+    "id": "ADM-009",
+    "sprint": 4,
+    "title": "Finance approvals and payout workflow",
+    "description": "Revenue cards, ledger, refunds, and payouts with dual-approval threshold.",
+    "acceptanceCriteria": [
+      "Dual-approval enforced above threshold",
+      "Mark-paid updates payout state",
+      "Finance actions are permission-restricted"
+    ]
+  },
+  {
+    "id": "ADM-010",
+    "sprint": 5,
+    "title": "Analytics and async export center",
+    "description": "Build analytics charts and PDF/Excel export jobs with downloadable links.",
+    "acceptanceCriteria": [
+      "Exports run asynchronously",
+      "Job status endpoint available",
+      "Download links are signed and time-bound"
+    ]
+  }
+]

@@ -1,19 +1,10 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import '../controllers/get_started_controller.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-// ─── Design Tokens (matching home_view) ────────────────────────────────────────
-const Color ink = Color(0xFF0A0A0F);
-const Color surface = Color(0xFF111118);
-const Color card = Color(0xFF17171F);
-const Color raised = Color(0xFF1E1E28);
-const Color stroke = Color(0xFF2A2A36);
-const Color neon = Color(0xFFCBFF47);
-const Color coral = Color(0xFFFF5C5C);
-const Color sky = Color(0xFF5CE8FF);
-const Color lilac = Color(0xFFA78BFA);
-const Color muted = Color(0xFF6B6B7E);
+import '../controllers/get_started_controller.dart';
+import '../../../../config/glass_ui.dart';
 
 class GetStartedView extends GetView<GetStartedController> {
   const GetStartedView({Key? key}) : super(key: key);
@@ -21,96 +12,155 @@ class GetStartedView extends GetView<GetStartedController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ink,
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // Top section with illustration
-            Padding(
-              padding: const EdgeInsets.only(top: 80.0),
+      backgroundColor: kInk,
+      body: Stack(
+        children: [
+          Positioned.fill(child: liquidBackground()),
+          Positioned(
+            top: -160,
+            left: -120,
+            child: GlowOrb(color: kSky, radius: 280),
+          ),
+          Positioned(
+            bottom: -120,
+            right: -80,
+            child: GlowOrb(color: kNeon, radius: 230),
+          ),
+          Positioned(
+            top: 320,
+            right: -60,
+            child: GlowOrb(color: kLilac, radius: 140),
+          ),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Column(
                 children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: sky.withOpacity(0.15),
-                      border: Border.all(color: sky, width: 2),
+                  const Spacer(),
+                  // Glass logo
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(24),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: glassDecoration(
+                          radius: 24,
+                          glowColor: kSky,
+                        ),
+                        child: ShaderMask(
+                          shaderCallback:
+                              (b) => const LinearGradient(
+                                colors: [Colors.white, kSky],
+                              ).createShader(b),
+                          child: const Icon(
+                            Icons.directions_run_rounded,
+                            size: 50,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
-                    child: const Icon(CupertinoIcons.person_badge_plus, size: 50, color: sky),
                   ),
-                  const SizedBox(height: 30),
-                  const Text("Let's Get Started", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white)),
-                  const SizedBox(height: 10),
-                  Text('Tell us about yourself', style: TextStyle(fontSize: 16, color: muted)),
+                  const SizedBox(height: 28),
+                  ShaderMask(
+                    shaderCallback:
+                        (b) => const LinearGradient(
+                          colors: [Colors.white, kSky],
+                        ).createShader(b),
+                    child: Text(
+                      "LET'S GET\nSTARTED",
+                      style: GoogleFonts.bebasNeue(
+                        fontSize: 46,
+                        color: Colors.white,
+                        height: 1.05,
+                        letterSpacing: 2,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Tell us about yourself to personalise your fitness plan',
+                    style: GoogleFonts.dmSans(fontSize: 14, color: kMuted),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 32),
+                  _featureRow(
+                    icon: Icons.person_rounded,
+                    title: 'Personal Info',
+                    desc: 'Share your basic details',
+                    color: kNeon,
+                  ),
+                  const SizedBox(height: 12),
+                  _featureRow(
+                    icon: Icons.sports_gymnastics_rounded,
+                    title: 'Fitness Goals',
+                    desc: 'Define your workout objectives',
+                    color: kCoral,
+                  ),
+                  const SizedBox(height: 12),
+                  _featureRow(
+                    icon: Icons.bar_chart_rounded,
+                    title: 'Track Progress',
+                    desc: 'Monitor your improvements',
+                    color: kLilac,
+                  ),
+                  const Spacer(),
+                  neonButton(
+                    label: 'Continue',
+                    accent: kSky,
+                    onPressed: () => controller.startProfile(),
+                  ),
+                  const SizedBox(height: 24),
                 ],
               ),
             ),
-
-            // Middle section with features
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: Column(
-                children: [
-                  _buildFeatureItem(icon: CupertinoIcons.person, title: 'Personal Info', description: 'Share your basic details', color: neon),
-                  const SizedBox(height: 16),
-                  _buildFeatureItem(icon: CupertinoIcons.sportscourt, title: 'Fitness Goals', description: 'Define your workout objectives', color: coral),
-                  const SizedBox(height: 16),
-                  _buildFeatureItem(icon: CupertinoIcons.graph_square, title: 'Track Progress', description: 'Monitor your improvements', color: lilac),
-                ],
-              ),
-            ),
-
-            // Bottom section with button
-            Padding(
-              padding: const EdgeInsets.only(bottom: 50.0, left: 30, right: 30),
-              child: SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: ElevatedButton(
-                  onPressed: () => controller.startProfile(),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: neon,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                  ),
-                  child: const Text('Continue', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: ink)),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildFeatureItem({required IconData icon, required String title, required String description, required Color color}) {
-    return Container(
+  Widget _featureRow({
+    required IconData icon,
+    required String title,
+    required String desc,
+    required Color color,
+  }) {
+    return LiquidTile(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: card,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: stroke),
-      ),
       child: Row(
         children: [
           Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(color: color.withOpacity(0.15), borderRadius: BorderRadius.circular(12)),
-            child: Icon(icon, color: color, size: 24),
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: color.withOpacity(0.3)),
+            ),
+            child: Icon(icon, color: color, size: 22),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white)),
-                const SizedBox(height: 4),
-                Text(description, style: TextStyle(fontSize: 14, color: muted)),
+                Text(
+                  title,
+                  style: GoogleFonts.dmSans(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  desc,
+                  style: GoogleFonts.dmSans(fontSize: 13, color: kMuted),
+                ),
               ],
             ),
           ),

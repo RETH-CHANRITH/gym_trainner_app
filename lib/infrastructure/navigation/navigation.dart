@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../config.dart';
-import 'package:gym_trainer/app/modules/favourite/views/favourite_view.dart';
-import 'package:gym_trainer/app/modules/favourite/bindings/favourite_binding.dart';
+import 'package:gym_trainer/app/modules/favorite/views/favorite_view.dart';
+import 'package:gym_trainer/app/modules/favorite/bindings/favorite_binding.dart';
 // ...existing code...
 import 'routes.dart';
 
@@ -16,11 +16,11 @@ class EnvironmentsBadge extends StatelessWidget {
     var env = ConfigEnvironments.getEnvironments()['env'];
     return env != Environments.PRODUCTION
         ? Banner(
-            location: BannerLocation.topStart,
-            message: env!,
-            color: env == Environments.QAS ? Colors.blue : Colors.purple,
-            child: child,
-          )
+          location: BannerLocation.topStart,
+          message: env!,
+          color: env == Environments.QAS ? Colors.blue : Colors.purple,
+          child: child,
+        )
         : SizedBox(child: child);
   }
 }
@@ -30,8 +30,7 @@ class Nav {
     GetPage(
       name: Routes.FAVOURITE,
       page: () => const FavouriteView(),
-      binding: FavouriteBinding(), // Ensure FavouriteBinding is correctly imported and defined
+      binding: FavoriteBinding(),
     ),
-    
   ];
 }

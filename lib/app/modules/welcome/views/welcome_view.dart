@@ -34,19 +34,39 @@ class WelcomeView extends GetView<WelcomeController> {
               child: Column(
                 children: [
                   Container(
-                    width: 100,
-                    height: 100,
+                    width: 160,
+                    height: 160,
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: neon.withOpacity(0.15),
-                      border: Border.all(color: neon, width: 2),
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: neon.withOpacity(0.3),
+                          blurRadius: 20,
+                          spreadRadius: 2,
+                        ),
+                      ],
                     ),
-                    child: const Icon(CupertinoIcons.sportscourt, size: 50, color: neon),
+                    padding: const EdgeInsets.all(16),
+                    child: Image.asset(
+                      'assets/image/logo.png',
+                      fit: BoxFit.contain,
+                    ),
                   ),
                   const SizedBox(height: 30),
-                  const Text('Welcome', style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white)),
+                  const Text(
+                    'Welcome',
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
                   const SizedBox(height: 10),
-                  Text('to Your Fitness Journey', style: TextStyle(fontSize: 18, color: muted)),
+                  Text(
+                    'to Your Fitness Journey',
+                    style: TextStyle(fontSize: 18, color: muted),
+                  ),
                 ],
               ),
             ),
@@ -64,7 +84,11 @@ class WelcomeView extends GetView<WelcomeController> {
                 child: Text(
                   'Get ready to transform your body and achieve your fitness goals with professional trainers.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, color: Colors.white.withOpacity(0.8), height: 1.6),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white.withOpacity(0.8),
+                    height: 1.6,
+                  ),
                 ),
               ),
             ),
@@ -79,9 +103,18 @@ class WelcomeView extends GetView<WelcomeController> {
                   onPressed: () => controller.goToGetStarted(),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: neon,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
                   ),
-                  child: const Text('Get Started', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: ink)),
+                  child: const Text(
+                    'Get Started',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: ink,
+                    ),
+                  ),
                 ),
               ),
             ),
