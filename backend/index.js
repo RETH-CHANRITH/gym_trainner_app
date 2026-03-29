@@ -67,6 +67,23 @@ app.use((req, res, next) => {
   next();
 });
 
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Gym Trainer Booking App Backend API',
+    status: 'running',
+    version: '1.0.0',
+    endpoints: {
+      health: '/health',
+      auth: '/api/v1/auth',
+      users: '/api/v1/users',
+      trainers: '/api/v1/trainers',
+      bookings: '/api/v1/bookings',
+      admin: '/api/v1/admin'
+    }
+  });
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({
