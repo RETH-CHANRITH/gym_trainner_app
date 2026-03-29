@@ -8,7 +8,9 @@ class OnboardingController extends GetxController {
   final pageController = PageController();
   final currentPage = 0.obs;
   final totalPages = 3;
-  final _roleService = Get.find<UserRoleService>();
+
+  // Get UserRoleService lazily when needed, not at init time
+  UserRoleService get _roleService => Get.find<UserRoleService>();
 
   void onPageChanged(int index) {
     currentPage.value = index;

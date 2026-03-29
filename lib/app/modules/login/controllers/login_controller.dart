@@ -16,7 +16,9 @@ class LoginController extends GetxController {
 
   final _auth = FirebaseAuth.instance;
   final _googleSignIn = GoogleSignIn();
-  final _roleService = Get.find<UserRoleService>();
+
+  // Get UserRoleService lazily when needed, not at init time
+  UserRoleService get _roleService => Get.find<UserRoleService>();
 
   @override
   void onInit() {

@@ -13,7 +13,9 @@ class SignUpController extends GetxController {
   final isLoading = false.obs;
 
   final _auth = FirebaseAuth.instance;
-  final _roleService = Get.find<UserRoleService>();
+
+  // Get UserRoleService lazily when needed, not at init time
+  UserRoleService get _roleService => Get.find<UserRoleService>();
 
   Future<void> signUp() async {
     final name = nameController.text.trim();
