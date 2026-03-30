@@ -35,6 +35,8 @@ abstract class Routes {
   static const TRAINER_DASHBOARD = _Paths.TRAINER_DASHBOARD;
   static const TRAINER_AVAILABILITY = _Paths.TRAINER_AVAILABILITY;
   static const ADMIN_DASHBOARD = _Paths.ADMIN_DASHBOARD;
+  static const STREAK_DETAILS = _Paths.STREAK_DETAILS;
+  static const GOALS_DETAILS = _Paths.GOALS_DETAILS;
 }
 
 abstract class _Paths {
@@ -72,4 +74,6 @@ abstract class _Paths {
   static const TRAINER_DASHBOARD = '/trainer-dashboard';
   static const TRAINER_AVAILABILITY = '/trainer-availability';
   static const ADMIN_DASHBOARD = '/admin-dashboard';
+  static const STREAK_DETAILS = '/streak-details';
+  static const GOALS_DETAILS = '/goals-details';
 }

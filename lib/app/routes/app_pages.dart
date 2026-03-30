@@ -62,6 +62,10 @@ import '../modules/trainer_availability/bindings/trainer_availability_binding.da
 import '../modules/trainer_availability/views/trainer_availability_view.dart';
 import '../modules/admin_dashboard/bindings/admin_dashboard_binding.dart';
 import '../modules/admin_dashboard/views/admin_dashboard_view.dart';
+import '../modules/streak_details/bindings/streak_details_binding.dart';
+import '../modules/streak_details/views/streak_details_view.dart';
+import '../modules/goals_details/bindings/goals_details_binding.dart';
+import '../modules/goals_details/views/goals_details_view.dart';
 
 part 'app_routes.dart';
 
@@ -230,5 +234,15 @@ class AppPages {
       binding: WalletBinding(),
     ),
     GetPage(name: _Paths.ALL_SESSIONS, page: () => const AllSessionsView()),
+    GetPage(
+      name: _Paths.STREAK_DETAILS,
+      page: () => const StreakDetailsView(),
+      binding: StreakDetailsBinding(),
+    ),
+    GetPage(
+      name: _Paths.GOALS_DETAILS,
+      page: () => const GoalsDetailsView(),
+      binding: GoalsDetailsBinding(),
+    ),
   ];
 }

@@ -312,6 +312,19 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
+  // ─── Stat Card Navigation ─────────────────────────────────────────────────
+  void navigateToStreakDetails() {
+    Get.toNamed('/streak-details');
+  }
+
+  void navigateToSessionsDetails() {
+    Get.toNamed('/my-bookings');
+  }
+
+  void navigateToGoalsDetails() {
+    Get.toNamed('/goals-details');
+  }
+
   void changeTab(int index) {
     currentIndex.value = index;
   }

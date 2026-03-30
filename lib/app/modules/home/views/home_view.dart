@@ -394,6 +394,7 @@ class HomeView extends GetView<HomeController> {
             '${controller.streak.value}',
             'Streak',
             coral,
+            onTap: controller.navigateToStreakDetails,
           ),
           const SizedBox(width: 12),
           _buildStatChip(
@@ -401,6 +402,7 @@ class HomeView extends GetView<HomeController> {
             '${controller.sessionsCount.value}',
             'Sessions',
             sky,
+            onTap: controller.navigateToSessionsDetails,
           ),
           const SizedBox(width: 12),
           _buildStatChip(
@@ -408,6 +410,7 @@ class HomeView extends GetView<HomeController> {
             '${controller.goalsCount.value}',
             'Goals',
             neon,
+            onTap: controller.navigateToGoalsDetails,
           ),
         ],
       ),
@@ -418,33 +421,37 @@ class HomeView extends GetView<HomeController> {
     IconData icon,
     String value,
     String label,
-    Color accent,
-  ) {
+    Color accent, {
+    VoidCallback? onTap,
+  }) {
     return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-        decoration: BoxDecoration(
-          color: card,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: stroke),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, color: accent, size: 20),
-            const SizedBox(height: 8),
-            Text(
-              value,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-                fontWeight: FontWeight.w800,
-                letterSpacing: -0.5,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+          decoration: BoxDecoration(
+            color: card,
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: stroke),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, color: accent, size: 20),
+              const SizedBox(height: 8),
+              Text(
+                value,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.5,
+                ),
               ),
-            ),
-            const SizedBox(height: 2),
-            Text(label, style: TextStyle(color: muted, fontSize: 11)),
-          ],
+              const SizedBox(height: 2),
+              Text(label, style: TextStyle(color: muted, fontSize: 11)),
+            ],
+          ),
         ),
       ),
     );
