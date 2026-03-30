@@ -5,6 +5,8 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const admin = require('firebase-admin');
 
+// Version: 1.0.1 - Fixed route loading errors
+
 // Initialize Firebase Admin FIRST before importing routes
 let serviceAccount;
 let firebaseInitialized = false;
